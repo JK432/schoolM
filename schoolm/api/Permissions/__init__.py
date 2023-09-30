@@ -1,0 +1,2 @@
+from .is_teachers_subject_permission import IsTeachersSubject
+from .is_superuser import IsSuperUser
