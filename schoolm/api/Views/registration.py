@@ -1,49 +1,58 @@
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.authtoken.models import Token
-from ..models import UserManager
-from ..Serializers import UserSerializer
-
-
-def register_user(request, is_super=False):
-    email = request.data.get("email")
-    password = request.data.get("password")
-    password2 = request.data.get("password2")
-    user_manager = UserManager()
-    serializer = UserSerializer(data=request.data)
-
-    if not serializer.is_valid():
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    if password != password2:
-        return Response({'error': 'Password incorrect'},
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    if email is None and password is None:
-        return Response({'error': 'Please provide email & password'},
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    if is_super:
-        user = user_manager.create_superuser(email=email, password=password)
-    else:
-        user = user_manager.create_user(email=email, password=password)
-
-    if not user:
-        return Response({'error': 'Invalid credentials'},
-                        status=status.HTTP_404_NOT_FOUND)
-
-    token, _ = Token.objects.get_or_create(user=user)
-    return Response({'token': token.key, 'is_super': user.is_superuser},
-                    status=status.HTTP_200_OK)
-
-
-@api_view(['POST'])
-def super_signup(request):
-    return register_user(request=request, is_super=True)
-
-
-@api_view(['POST'])
-def normal_signup(request):
-    return register_user(request=request, is_super=False)
+# from ..Serializers import UserSerializer, UserRegistrationSerializer, UserLoginSerializer, SuperUserRegistrationSerializer
+# from django.contrib.auth import get_user_model
+# from rest_framework import viewsets, status
+# from rest_framework.response import Response
+# from rest_framework.decorators import action
+# from django.contrib.auth import authenticate, login, logout
+# from rest_framework.authtoken.models import Token
+#
+# User = get_user_model()
+#
+#
+# class UserViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#
+#     # FOR SUPERUSER REGISTRATION
+#     @action(detail=False, methods=['post'])
+#     def superregister(self, request):
+#         serializer = SuperUserRegistrationSerializer(data=request.data)
+#         if serializer.is_valid():
+#             user = serializer.save()
+#             if user:
+#                 login(request, user)
+#                 token, created = Token.objects.get_or_create(user=user)
+#                 return Response({'user': UserSerializer(user).data, 'token': token.key}, status=status.HTTP_200_OK)
+#             return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+#
+#     # FOR NORMAL REGISTRATION
+#     @action(detail=False, methods=['post'])
+#     def register(self, request):
+#         serializer = UserRegistrationSerializer(data=request.data)
+#         if serializer.is_valid():
+#             user = serializer.save()
+#             if user:
+#                 login(request, user)
+#                 token, created = Token.objects.get_or_create(user=user)
+#                 return Response({'user': UserSerializer(user).data, 'token': token.key}, status=status.HTTP_200_OK)
+#             return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+#
+#     # FOR LOGIN
+#     @action(detail=False, methods=['post'])
+#     def login(self, request):
+#         serializer = UserLoginSerializer(data=request.data)
+#         if serializer.is_valid():
+#             username = serializer.validated_data['username']
+#             password = serializer.validated_data['password']
+#             user = authenticate(request, username=username, password=password)
+#             if user:
+#                 login(request, user)
+#                 token, created = Token.objects.get_or_create(user=user)
+#                 return Response({'user': UserSerializer(user).data, 'token': token.key}, status=status.HTTP_200_OK)
+#             return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+#
+#     # FOR LOGOUT
+#     @action(detail=False, methods=['get'])
+#     def logout(self, request):
+#         logout(request)
+#         return Response({'detail': 'Logged out successfully'}, status=status.HTTP_200_OK)
