@@ -9,4 +9,4 @@ class SubjectModelViewSet(viewsets.ModelViewSet):
     queryset = Subject.objects.all()
     serializer_class = SubjectSerializer
     filter_backends = [DjangoFilterBackend]
-    permission_classes = [IsAuthenticated]
+    filterset_fields = '__all__'

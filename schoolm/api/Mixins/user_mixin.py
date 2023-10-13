@@ -3,6 +3,9 @@ from django.contrib.auth.models import Group, Permission
 
 
 class UserMixin(models.Model):
+
+    USERNAME_FIELD = 'email'
+
     class Meta:
         abstract = True
     ROLES = (

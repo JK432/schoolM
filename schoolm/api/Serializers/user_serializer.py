@@ -6,5 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ['id', 'first_name', 'roles', 'email', 'password']
+
+    password = serializers.CharField(write_only=True, required=True, max_length=128, style={'input_type': 'password'})
 
