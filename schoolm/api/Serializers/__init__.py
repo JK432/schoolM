@@ -1,3 +1,3 @@
-from .mark_serializers import MarkSerializer
-from .user_serializer import UserSerializer
-from .subject_serializers import SubjectSerializer
+from .mark import MarkSerializer
+from .user import StudentSerializer
+from .subject import SubjectSerializer

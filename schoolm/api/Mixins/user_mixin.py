@@ -1,18 +1,17 @@
 from django.db import models
-from django.contrib.auth.models import Group, Permission
+
+
+class Role(models.IntegerChoices):
+    TEACHER = 0, 'TEACHER'
+    STUDENT = 1, 'STUDENT'
 
 
 class UserMixin(models.Model):
-
-    USERNAME_FIELD = 'email'
-
     class Meta:
         abstract = True
-    ROLES = (
-        (1, 'STUDENT'),
-        (2, 'TEACHER'),
-    )
+
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
-    roles = models.IntegerField(choices=ROLES, null=True)
     email = models.EmailField(max_length=200, unique=True, db_index=True)
+    role = models.IntegerField(default=Role.STUDENT, choices=Role.choices)
+    is_active = models.BooleanField(default=True, db_index=True)

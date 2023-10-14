@@ -93,7 +93,9 @@ DATABASES = {
     }
 }
 
-
+FILTER_STRING_MODELS = ['exact', 'icontains', 'istartswith', 'iendswith']
+FILTER_NUMBER_MODELS = ['exact', 'lt', 'lte', 'gt', 'gte']
+FILTER_EXACT_MODELS = ['exact']
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
