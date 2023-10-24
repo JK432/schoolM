@@ -4,6 +4,7 @@ from ..serializers import *
 from django.conf import settings
 from django_filters.rest_framework import FilterSet
 from ..mixins.user_mixin import Role
+from rest_framework.permissions import IsAuthenticated
 
 
 class MarkFilter(FilterSet):
@@ -19,8 +20,11 @@ class MarkFilter(FilterSet):
 class MarkModelViewSet(ModelViewSet):
     serializer_class = MarkSerializer
     filterset_class = MarkFilter
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Mark.objects.filter(student__role=Role.STUDENT)
-
+        # if(self.request.user.role==Role.STUDENT):
+        #     return Mark.objects.filter(student__role=Role.STUDENT, student=self.request.user)
+        # else:
+            return Mark.objects.filter(student__role=Role.STUDENT,)
 

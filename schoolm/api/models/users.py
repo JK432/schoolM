@@ -25,7 +25,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, UserMixin):
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'role']
     objects = UserManager()
 
     class Meta:

@@ -7,6 +7,7 @@ router = DefaultRouter()
 router.register(r'register', StudentModelViewSet, basename='Student')
 router.register(r'subject', SubjectModelViewSet)
 router.register(r'mark', MarkModelViewSet, basename='mark')
+router.register(r'user', UserModelViewSet, basename='user')
 app_name = 'api'
 urlpatterns = [
     path('token/', obtain_auth_token, name="login"),
